@@ -117,6 +117,8 @@
 
         //create a default skybox
         scene.createDefaultEnvironment();
+        let envTexture = new BABYLON.CubeTexture("https://assets.babylonjs.com/environments/environmentSpecular.env", scene);
+        scene.createDefaultSkybox(envTexture, true, 1000);
         scene.getNodeByID("BackgroundHelper").dispose();
         engine.runRenderLoop(function () {
             scene.render();
