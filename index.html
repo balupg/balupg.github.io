@@ -89,7 +89,11 @@
                 }
                 else {
                     //else merge all meshes using the same materials
+                    try{
                     BABYLON.Mesh.MergeMeshes(relatedMeshes,true,true);
+                    }
+                    catch(err)
+                    {}
                 }
             }
 
