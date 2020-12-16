@@ -69,7 +69,22 @@
 
         //load the things
         BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/balupg/balupg.github.io/master/Content/", "Flats1.glb", scene, function (scene) {
-            // do something with the scene
+            
+            //first remove all duplicate material assignments by replacing them with the base material
+            scene.meshes.forEach(function (m) {
+                let matlID = m.material.id;
+                if (matlID.includes("."))
+                {
+                    m.material = scene.getMaterialByID(matlID.split(".)[0]"));
+                }
+            });
+            //now go through all materials and dispose unused ones
+            scene.materials.forEach(function(mtl){
+                if (mtl.getBindedMeshes().length == 0)
+                {
+                    mtl.dispose();
+                }
+            });
             scene.meshes.forEach(function (m) {
                 m.checkCollisions = true;
             });
