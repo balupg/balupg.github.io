@@ -74,12 +74,16 @@
         BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/balupg/balupg.github.io/master/Content/", "Flats1.glb", scene, function (scene) {
 
             //first remove all duplicate material assignments by replacing them with the base material
+            var defMaterial = scene.getMaterialByID("Concrete");
             scene.meshes.forEach(function (m) {
                 if (m.material) {
                     let matlID = m.material.id;
                     if (matlID.includes(".")) {
                         m.material = scene.getMaterialByID(matlID.split(".")[0]);
                     }
+                }
+                else {
+                    m.material = defMaterial;
                 }
             });
             //now go through all materials and dispose unused ones
@@ -110,7 +114,7 @@
 
         //create a default skybox
         scene.createDefaultEnvironment();
-
+        scene.getNodeByID("BackgroundHelper").dispose();
         engine.runRenderLoop(function () {
             scene.render();
         });
