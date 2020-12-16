@@ -108,13 +108,7 @@
         });
 
         //create a default skybox
-        scene.createDefaultSkybox(
-            new BABYLON.CubeTexture(cubeTextureUrl, scene),
-            pbr,
-            scale,
-            blur,
-            setGlobalEnvTextur
-        );
+        scene.createDefaultEnvironment();
 
         engine.runRenderLoop(function () {
             scene.render();
