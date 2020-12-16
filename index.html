@@ -80,14 +80,21 @@
                 }
             });
             //now go through all materials and dispose unused ones
-            for (var mt=0; mt < scene.materials.length; mt++)
-            {
+            for (var mt = 0; mt < scene.materials.length; mt++) {
                 let mtl = scene.materials[mt];
-                if (mtl.getBindedMeshes().length == 0) {
+                let relatedMeshes = mtl.getBindedMeshes();
+                if (relatedMeshes.length == 0) {
                     mtl.dispose();
                     mt--;
                 }
+                else {
+                    //else merge all meshes using the same materials
+                    BABYLON.Mesh.MergeMeshes(relatedMeshes);
+                }
             }
+
+
+
             scene.meshes.forEach(function (m) {
                 m.checkCollisions = true;
             });
