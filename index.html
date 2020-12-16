@@ -80,11 +80,14 @@
                 }
             });
             //now go through all materials and dispose unused ones
-            scene.materials.forEach(function (mtl) {
+            for (var mt=0; mt < scene.materials.length; mt++)
+            {
+                let mtl = scene.materials[mt];
                 if (mtl.getBindedMeshes().length == 0) {
                     mtl.dispose();
+                    mt--;
                 }
-            });
+            }
             scene.meshes.forEach(function (m) {
                 m.checkCollisions = true;
             });
