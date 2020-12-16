@@ -99,7 +99,7 @@
 
 
             scene.meshes.forEach(function (m) {
-                if (!m.id.startsWith("B")) {
+                if (!m.id.toLowerCase().startsWith("B")) {
                     m.checkCollisions = true;
                 }
             });
