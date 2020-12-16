@@ -73,8 +73,8 @@
         const scene = createScene();
 
         //load the things
-        //BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/balupg/balupg.github.io/master/Content/", "Flats1.glb", scene, function (scene) {
-            BABYLON.SceneLoader.Append("./Content/", "scene.babylon", scene, function (scene) {
+        BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/balupg/balupg.github.io/master/Content/", "scene.babylon", scene, function (scene) {
+            //BABYLON.SceneLoader.Append("https://github.com/balupg/balupg.github.io/find/master", "scene.babylon", scene, function (scene) {
             //get the full list of materials
             let fullMaterialList = scene.materials.map(function (mt) { return mt.id; });
             fullMaterialList.sort();
