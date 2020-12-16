@@ -49,8 +49,8 @@
             camera.position.x = 0;
             camera.position.y = 4;
             camera.position.z = 0;
-            camera.ellipsoid.x=.1;
-            camera.ellipsoid.y=0.8;
+            camera.ellipsoid.x = .1;
+            camera.ellipsoid.y = 0.8;
             camera.ellipsoid.z = 0.1;
             camera.checkCollisions = true;
             camera.applyGravity = true
@@ -101,11 +101,20 @@
 
 
             scene.meshes.forEach(function (m) {
-                if (m.id.toLowerCase().startsWith("w") || m.id.toLowerCase().startsWith("f") ) {
+                if (m.id.toLowerCase().startsWith("w") || m.id.toLowerCase().startsWith("f")) {
                     m.checkCollisions = true;
                 }
             });
         });
+
+        //create a default skybox
+        scene.createDefaultSkybox(
+            new BABYLON.CubeTexture(cubeTextureUrl, scene),
+            pbr,
+            scale,
+            blur,
+            setGlobalEnvTextur
+        );
 
         engine.runRenderLoop(function () {
             scene.render();
