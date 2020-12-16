@@ -3,8 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>Landmark Project - Singapore</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Landmark Project - Singapore</title>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
 
     <script src="Scripts/cannon.js"></script>
@@ -12,13 +12,15 @@
     <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
     <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
     <style>
-        html, body {
+        html,
+        body {
             overflow: hidden;
             width: 100%;
             height: 100%;
             margin: 0;
             padding: 0;
         }
+
         #renderCanvas {
             width: 100%;
             height: 100%;
@@ -33,7 +35,7 @@
     <script>
         const canvas = document.getElementById('renderCanvas');
         const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
-        
+
         const createScene = function () {
             // Create a basic BJS Scene object
             var scene = new BABYLON.Scene(engine);
@@ -65,8 +67,10 @@
 
         //load the things
         BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/balupg/balupg.github.io/master/Content/", "Flats1.glb", scene, function (scene) {
-    // do something with the scene
-    scene.meshes.forEach(function(m){m.checkforCollision});
+            // do something with the scene
+            scene.meshes.forEach(function (m) {
+                m.checkforCollision = true;
+            });
         });
 
         engine.runRenderLoop(function () {
