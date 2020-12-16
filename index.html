@@ -75,7 +75,7 @@
         BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/balupg/balupg.github.io/master/Content/", "Flats1.glb", scene, function (scene) {
 
             //get the full list of materials
-            let fullMaterialList = scene.materials.map(function (mt) { return mm.id; });
+            let fullMaterialList = scene.materials.map(function (mt) { return mt.id; });
             fullMaterialList.sort();
             //first remove all duplicate material assignments by replacing them with the base material
             var defMaterial = scene.getMaterialByID("Concrete");
