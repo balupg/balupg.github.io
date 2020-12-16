@@ -44,6 +44,10 @@
             camera.setTarget(BABYLON.Vector3.Zero());
             // Attach the camera to the canvas
             camera.attachControl(canvas, false);
+            //move the camera to 0,0,4
+            camera.position.x = 0;
+            camera.position.y = 4;
+            camera.position.z = 0;
             // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
             var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
             // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
