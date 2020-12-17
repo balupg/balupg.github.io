@@ -5,13 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Landmark Project - Singapore</title>
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://preview.babylonjs.com/babylon.js"></script>
 
     <script src="Scripts/cannon.js"></script>
 
     <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
-    <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+    <script src="https://code.jquery.com/pep/0.4.2/pep.min.js"></script>
     <style>
         html,
         body {
@@ -36,29 +36,31 @@
     <script>
         const canvas = document.getElementById('renderCanvas');
         const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+        var camera;
 
         const createScene = function () {
             // Create a basic BJS Scene object
             var scene = new BABYLON.Scene(engine);
             // Create a FreeCamera, and set its position to {x: 0, y: 5, z: -10}
-            var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), scene);
+            camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), scene);
             // Target the camera to scene origin
             camera.setTarget(BABYLON.Vector3.Zero());
             // Attach the camera to the canvas
-            camera.attachControl(canvas, false);
+            //camera.attachControl(canvas, false);
             //move the camera to 0,0,4
-            camera.position.x = 0;
-            camera.position.y = 4;
-            camera.position.z = 0;
+            camera.position.x = -20;
+            camera.position.y = 2.06;
+            camera.position.z = 4;
             camera.ellipsoid.x = .1;
-            camera.ellipsoid.y = 1;
+            camera.ellipsoid.y = 0.8;
             camera.ellipsoid.z = .1;
             camera.checkCollisions = true;
             camera.applyGravity = true;
             camera.speed = 0.2;
-            camera.minZ = 0.1;
+            camera.minZ = 0.01;
             // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
             var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
+            light.intensity = 0.8;
             // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
             //var sphere = BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene, false, BABYLON.Mesh.FRONTSIDE);
             // Move the sphere upward 1/2 of its height
@@ -73,13 +75,13 @@
         const scene = createScene();
 
         //load the things
-        BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/balupg/balupg.github.io/master/Content/", "scene.babylon", scene, function (scene) {
-            //BABYLON.SceneLoader.Append("https://github.com/balupg/balupg.github.io/find/master", "scene.babylon", scene, function (scene) {
+        //BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/balupg/balupg.github.io/master/Content/", "scene.babylon", scene, function (scene) {
+            BABYLON.SceneLoader.Append("./Content/", "scene.babylon", scene, function (scene) {
             //get the full list of materials
             let fullMaterialList = scene.materials.map(function (mt) { return mt.id; });
             fullMaterialList.sort();
             //first remove all duplicate material assignments by replacing them with the base material
-            var defMaterial = scene.getMaterialByID("Concrete");
+            //var defMaterial = scene.getMaterialByID("Concrete");
             scene.meshes.forEach(function (m) {
                 if (m.material) {
                     let matlID = m.material.id;
@@ -87,7 +89,12 @@
                     m.material = scene.getMaterialByID(fullMaterialList[assignMatl]);
                 }
                 else {
-                    m.material = defMaterial;
+                    //m.material = defMaterial;
+                }
+                if (m.name.startsWith("Window glass"))
+                {
+                    m.visibility = 1;
+                    m.material = scene.getMaterialByName("Glass");
                 }
             });
             //now go through all materials and dispose unused ones
@@ -108,18 +115,51 @@
             }
 
 
-
+            var ground = scene.getMeshByName("ground");
+            if (ground)
+            {
+                ground.dispose();
+            }
             scene.meshes.forEach(function (m) {
-                if (m.id.toLowerCase().startsWith("w") || m.id.toLowerCase().startsWith("f")) {
+                m.useVertexColors = false;
+                if (m.name.toLowerCase().startsWith("w") || m.name.toLowerCase().startsWith("f")) {
                     m.checkCollisions = true;
                 }
             });
+
+            //change Glass appearance
+            let glass = scene.getMaterialByName("Glass");
+            if (glass)
+            {
+                glass.alpha = 0.7;
+            }
+            //change concrete appearance
+            let concrete = scene.getMaterialByName("Concrete");
+            if (concrete)
+            {
+                concrete.backFaceCulling = false;
+            }
+             //change wall appearance
+             let white = scene.getMaterialByName("White");
+            if (white)
+            {
+                let newWhite = white.clone();
+                newWhite.diffuseTexture = new BABYLON.Texture("./Content/files/Rough-White-Wall-Texture.jpg", scene);
+                //assign to all walls
+                scene.meshes.forEach(function (m) {
+                if (m.name.toLowerCase().startsWith("wall") ) {
+                    m.material = newWhite;
+                }
+            });
+            }
+            camera.attachControl(canvas, false);
+            scene.activeCamera = camera;
         });
 
         //create a default skybox
         scene.createDefaultEnvironment();
-        let envTexture = new BABYLON.CubeTexture("https://assets.babylonjs.com/environments/environmentSpecular.env", scene);
-        scene.createDefaultSkybox(envTexture, true, 1000);
+        //let envTexture = new BABYLON.CubeTexture("https://assets.babylonjs.com/environments/environmentSpecular.env", scene);
+        //scene.createDefaultSkybox(envTexture, true, 1000);
         scene.getNodeByID("BackgroundHelper").dispose();
         engine.runRenderLoop(function () {
             scene.render();
